@@ -12,6 +12,6 @@ export class PostService {
   }
 
   getPostByTitle(title: string): Observable<Post[]> {
-    return this.http.get<Post[]>(`/posts?title=${title}`);
+    return this.http.get<Post[]>(`/posts?title_like=${title}`);
   }
 }

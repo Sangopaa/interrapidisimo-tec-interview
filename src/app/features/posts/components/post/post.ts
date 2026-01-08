@@ -1,10 +1,9 @@
-import { Component, input } from '@angular/core';
+import { Component, input, effect } from '@angular/core';
 import { Post as PostModel } from '../../../../core/models/post.model';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { UpperCasePipe } from '@angular/common';
-import { User } from '../../../../core/models/user.model';
 
 @Component({
   selector: 'app-post',
@@ -13,5 +12,4 @@ import { User } from '../../../../core/models/user.model';
 })
 export class PostComponent {
   post = input.required<PostModel>();
-  user = input.required<User>();
 }
