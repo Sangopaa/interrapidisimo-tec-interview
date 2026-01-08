@@ -1,4 +1,12 @@
-import { Component, inject, HostListener } from '@angular/core';
+import {
+  Component,
+  inject,
+  ViewChild,
+  ElementRef,
+  AfterViewInit,
+  OnDestroy,
+  effect,
+} from '@angular/core';
 import { PostComponent } from './components/post/post';
 import { InputComponent } from './components/input/input';
 import { PostsStore } from '../../core/stores/posts.store';
@@ -9,25 +17,52 @@ import { PostsStore } from '../../core/stores/posts.store';
   providers: [PostsStore],
   templateUrl: './posts.html',
 })
-export class Posts {
+export class Posts implements AfterViewInit, OnDestroy {
   readonly store = inject(PostsStore);
 
+  @ViewChild('sentinel') sentinel!: ElementRef;
+  private observer?: IntersectionObserver;
+
   constructor() {
-    this.store.loadUsers();
-    this.store.loadMore();
+    effect(() => {
+      const isLoading = this.store.isLoading();
+
+      setTimeout(() => {
+        if (!isLoading && this.isSentinelVisible()) {
+          this.store.loadMore();
+        }
+      }, 100);
+    });
   }
 
-  @HostListener('window:scroll')
-  onScroll() {
-    const scrollPosition =
-      window.scrollY || document.documentElement.scrollTop || document.body.scrollTop || 0;
-    const scrollHeight = document.documentElement.scrollHeight || document.body.scrollHeight;
-    const clientHeight = document.documentElement.clientHeight || window.innerHeight;
-
-    if (scrollPosition + clientHeight >= scrollHeight - 50) {
-      this.store.loadMore();
-    }
+  ngAfterViewInit() {
+    this.initObserver();
   }
+
+  ngOnDestroy() {
+    this.observer?.disconnect();
+  }
+
+  private initObserver() {
+    if (!this.sentinel) return;
+
+    this.observer = new IntersectionObserver((entries) => {
+      if (entries[0].isIntersecting && !this.store.isLoading()) {
+        this.store.loadMore();
+      }
+    });
+
+    this.observer.observe(this.sentinel.nativeElement);
+  }
+  private isSentinelVisible(): boolean {
+    if (!this.sentinel?.nativeElement) return false;
+
+    const rect = this.sentinel.nativeElement.getBoundingClientRect();
+    const windowHeight = window.innerHeight || document.documentElement.clientHeight;
+
+    return rect.top <= windowHeight && rect.bottom >= 0;
+  }
+
   onSearch(query: string) {
     this.store.updateQuery(query);
   }
