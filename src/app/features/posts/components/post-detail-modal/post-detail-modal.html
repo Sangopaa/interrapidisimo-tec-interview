@@ -2,14 +2,11 @@
   class="fixed inset-0 z-50 flex items-center justify-center p-4 backdrop animate-fade-in"
   (click)="onBackdropClick($event)"
 >
-  <!-- Backdrop Visual (the click listener is on the parent container) -->
   <div class="absolute inset-0 bg-black/60 backdrop-blur-md -z-10 backdrop"></div>
 
-  <!-- Modal Card -->
   <div
     class="bg-white rounded-3xl shadow-2xl w-full max-w-2xl overflow-hidden flex flex-col max-h-[90vh] relative animate-ticket-pop"
   >
-    <!-- Close Button -->
     <button
       mat-icon-button
       (click)="onClose()"
@@ -18,11 +15,9 @@
       <mat-icon>close</mat-icon>
     </button>
 
-    <!-- Header Section with Gradient -->
     <div
       class="relative bg-gradient-to-br from-indigo-600 via-blue-600 to-blue-500 p-8 pb-16 text-white overflow-hidden shrink-0"
     >
-      <!-- Decorative circles -->
       <div
         class="absolute top-[-20%] right-[-10%] w-64 h-64 bg-white/10 rounded-full blur-3xl"
       ></div>
@@ -31,7 +26,6 @@
       ></div>
 
       <div class="relative z-10 flex flex-col md:flex-row gap-6 items-start md:items-center">
-        <!-- Avocado-style / Initial Avatar -->
         <div
           class="w-20 h-20 rounded-2xl bg-white/20 backdrop-blur-md shadow-inner border border-white/30 flex items-center justify-center text-4xl font-bold text-white shrink-0 selection:bg-none"
         >
@@ -52,10 +46,8 @@
       </div>
     </div>
 
-    <!-- Content Section -->
     <div class="flex-1 overflow-y-auto bg-gray-50/50">
       <div class="p-8 -mt-8 relative z-10 flex flex-col gap-6">
-        <!-- Author Card Floating -->
         <div
           class="bg-white p-5 rounded-2xl shadow-lg border border-gray-100 flex flex-wrap items-center gap-6"
         >
@@ -111,7 +103,6 @@
           </div>
         </div>
 
-        <!-- Body Content -->
         <div class="bg-white p-8 rounded-2xl shadow-sm border border-gray-100">
           <h3 class="text-gray-900 font-bold text-xl mb-4 flex items-center gap-2">
             <mat-icon class="text-blue-500">description</mat-icon>
@@ -124,14 +115,9 @@
       </div>
     </div>
 
-    <!-- Footer Actions -->
     <div class="p-4 bg-white border-t border-gray-100 flex justify-end gap-3 shrink-0">
       <button mat-button (click)="onClose()" class="!text-gray-500 hover:!text-gray-800">
         Close
-      </button>
-      <button mat-flat-button color="primary" class="!bg-blue-600 !text-white !rounded-full !px-8">
-        Share Post
-        <mat-icon iconPositionEnd>share</mat-icon>
       </button>
     </div>
   </div>
