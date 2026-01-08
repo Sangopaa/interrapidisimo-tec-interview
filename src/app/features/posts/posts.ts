@@ -6,24 +6,30 @@ import {
   AfterViewInit,
   OnDestroy,
   effect,
+  signal,
 } from '@angular/core';
 import { PostComponent } from './components/post/post';
 import { InputComponent } from './components/input/input';
 import { PostsStore } from '../../core/stores/posts.store';
+import { Post } from '../../core/models/post.model';
+import { PostDetailModalComponent } from './components/post-detail-modal/post-detail-modal';
 
 @Component({
   selector: 'app-posts',
-  imports: [PostComponent, InputComponent],
+  imports: [PostComponent, InputComponent, PostDetailModalComponent],
   providers: [PostsStore],
   templateUrl: './posts.html',
 })
 export class Posts implements AfterViewInit, OnDestroy {
   readonly store = inject(PostsStore);
+  selectedPost = signal<Post | null>(null);
 
   @ViewChild('sentinel') sentinel!: ElementRef;
   private observer?: IntersectionObserver;
 
   constructor() {
+    this.store.loadUsers();
+
     effect(() => {
       const isLoading = this.store.isLoading();
 
@@ -33,6 +39,14 @@ export class Posts implements AfterViewInit, OnDestroy {
         }
       }, 100);
     });
+
+    effect(() => {
+      if (this.selectedPost()) {
+        document.body.style.overflow = 'hidden';
+      } else {
+        document.body.style.overflow = '';
+      }
+    });
   }
 
   ngAfterViewInit() {
@@ -41,6 +55,7 @@ export class Posts implements AfterViewInit, OnDestroy {
 
   ngOnDestroy() {
     this.observer?.disconnect();
+    document.body.style.overflow = '';
   }
 
   private initObserver() {
@@ -65,5 +80,13 @@ export class Posts implements AfterViewInit, OnDestroy {
 
   onSearch(query: string) {
     this.store.updateQuery(query);
+  }
+
+  openPost(post: Post) {
+    this.selectedPost.set(post);
+  }
+
+  closePost() {
+    this.selectedPost.set(null);
   }
 }

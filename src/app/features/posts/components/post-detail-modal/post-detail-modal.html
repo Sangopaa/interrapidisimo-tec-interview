@@ -1,0 +1,138 @@
+<div
+  class="fixed inset-0 z-50 flex items-center justify-center p-4 backdrop animate-fade-in"
+  (click)="onBackdropClick($event)"
+>
+  <!-- Backdrop Visual (the click listener is on the parent container) -->
+  <div class="absolute inset-0 bg-black/60 backdrop-blur-md -z-10 backdrop"></div>
+
+  <!-- Modal Card -->
+  <div
+    class="bg-white rounded-3xl shadow-2xl w-full max-w-2xl overflow-hidden flex flex-col max-h-[90vh] relative animate-ticket-pop"
+  >
+    <!-- Close Button -->
+    <button
+      mat-icon-button
+      (click)="onClose()"
+      class="!absolute !top-4 !right-4 !z-20 !text-white/80 hover:!text-white hover:!bg-white/20 !transition-colors !rounded-full"
+    >
+      <mat-icon>close</mat-icon>
+    </button>
+
+    <!-- Header Section with Gradient -->
+    <div
+      class="relative bg-gradient-to-br from-indigo-600 via-blue-600 to-blue-500 p-8 pb-16 text-white overflow-hidden shrink-0"
+    >
+      <!-- Decorative circles -->
+      <div
+        class="absolute top-[-20%] right-[-10%] w-64 h-64 bg-white/10 rounded-full blur-3xl"
+      ></div>
+      <div
+        class="absolute bottom-[-20%] left-[-10%] w-48 h-48 bg-blue-400/20 rounded-full blur-2xl"
+      ></div>
+
+      <div class="relative z-10 flex flex-col md:flex-row gap-6 items-start md:items-center">
+        <!-- Avocado-style / Initial Avatar -->
+        <div
+          class="w-20 h-20 rounded-2xl bg-white/20 backdrop-blur-md shadow-inner border border-white/30 flex items-center justify-center text-4xl font-bold text-white shrink-0 selection:bg-none"
+        >
+          {{ post().title.charAt(0) | uppercase }}
+        </div>
+
+        <div class="space-y-2">
+          <div
+            class="flex items-center gap-2 text-blue-100 text-sm font-medium tracking-wide uppercase opacity-90"
+          >
+            <mat-icon class="!w-4 !h-4 !text-sm flex items-center justify-center">article</mat-icon>
+            <span>Post Details</span>
+          </div>
+          <h2 class="text-2xl md:text-3xl font-bold leading-tight drop-shadow-sm">
+            {{ post().title | titlecase }}
+          </h2>
+        </div>
+      </div>
+    </div>
+
+    <!-- Content Section -->
+    <div class="flex-1 overflow-y-auto bg-gray-50/50">
+      <div class="p-8 -mt-8 relative z-10 flex flex-col gap-6">
+        <!-- Author Card Floating -->
+        <div
+          class="bg-white p-5 rounded-2xl shadow-lg border border-gray-100 flex flex-wrap items-center gap-6"
+        >
+          <div class="flex items-center gap-4">
+            <div
+              class="w-12 h-12 rounded-full bg-orange-100 flex items-center justify-center text-orange-600 font-bold text-xl"
+            >
+              {{ post().author?.name?.charAt(0) || 'A' }}
+            </div>
+            <div>
+              <div class="text-sm text-gray-400 font-semibold uppercase tracking-wider">Author</div>
+              <div class="text-gray-900 font-bold text-lg">
+                {{ post().author?.name || 'Unknown Author' }}
+              </div>
+            </div>
+          </div>
+
+          <div class="h-10 w-px bg-gray-200 hidden md:block"></div>
+
+          <div
+            class="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-3 w-full md:w-auto mt-4 md:mt-0"
+          >
+            <div class="flex items-center gap-2 text-gray-600 text-sm">
+              <mat-icon class="!w-4 !h-4 !text-sm text-blue-500">email</mat-icon>
+              <span>{{ post().author?.email || 'N/A' }}</span>
+            </div>
+            <div class="flex items-center gap-2 text-gray-600 text-sm">
+              <mat-icon class="!w-4 !h-4 !text-sm text-blue-500">phone</mat-icon>
+              <span>{{ post().author?.phone || 'N/A' }}</span>
+            </div>
+            <div class="flex items-center gap-2 text-gray-600 text-sm">
+              <mat-icon class="!w-4 !h-4 !text-sm text-blue-500">business</mat-icon>
+              <span>{{ post().author?.company?.name || 'N/A' }}</span>
+            </div>
+            <div class="flex items-center gap-2 text-gray-600 text-sm">
+              <mat-icon class="!w-4 !h-4 !text-sm text-blue-500">language</mat-icon>
+              <a
+                [href]="'http://' + post().author?.website"
+                target="_blank"
+                class="hover:underline hover:text-blue-600 transition-colors"
+              >
+                {{ post().author?.website || 'N/A' }}
+              </a>
+            </div>
+            <div class="flex items-center gap-2 text-gray-600 text-sm sm:col-span-2">
+              <mat-icon class="!w-4 !h-4 !text-sm text-blue-500">location_on</mat-icon>
+              <span>
+                {{ post().author?.address?.street }}, {{ post().author?.address?.city }} ({{
+                  post().author?.address?.zipcode
+                }})
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Body Content -->
+        <div class="bg-white p-8 rounded-2xl shadow-sm border border-gray-100">
+          <h3 class="text-gray-900 font-bold text-xl mb-4 flex items-center gap-2">
+            <mat-icon class="text-blue-500">description</mat-icon>
+            Content
+          </h3>
+          <p class="text-gray-600 leading-8 text-lg font-light">
+            {{ post().body }}
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer Actions -->
+    <div class="p-4 bg-white border-t border-gray-100 flex justify-end gap-3 shrink-0">
+      <button mat-button (click)="onClose()" class="!text-gray-500 hover:!text-gray-800">
+        Close
+      </button>
+      <button mat-flat-button color="primary" class="!bg-blue-600 !text-white !rounded-full !px-8">
+        Share Post
+        <mat-icon iconPositionEnd>share</mat-icon>
+      </button>
+    </div>
+  </div>
+</div>

@@ -1,4 +1,4 @@
-import { Component, input, effect } from '@angular/core';
+import { Component, input, effect, signal } from '@angular/core';
 import { Post as PostModel } from '../../../../core/models/post.model';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
@@ -12,4 +12,10 @@ import { UpperCasePipe } from '@angular/common';
 })
 export class PostComponent {
   post = input.required<PostModel>();
+  liked = signal(false);
+
+  toggleLike(event: MouseEvent) {
+    event.stopPropagation();
+    this.liked.update((v) => !v);
+  }
 }
