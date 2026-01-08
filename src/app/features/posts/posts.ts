@@ -28,7 +28,6 @@ export class Posts {
       this.store.loadMore();
     }
   }
-
   onSearch(query: string) {
     this.store.updateQuery(query);
   }
