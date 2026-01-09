@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 72 72">
+  <g transform="translate(0,0)">
+    <!-- Back covers -->
+    <path fill="#6A4E23" d="M36,54c0,0-5.875,1-13,1s-13-2-13-2V17c0,0,5.875,3,13,3s13-2,13-2V54z"/>
+    <path fill="#6A4E23" d="M36,54c0,0,5.875,1,13,1s13-2,13-2V17c0,0-5.875,3-13,3s-13-2-13-2V54z"/>
+    <!-- Pages -->
+    <path fill="#FCEA2B" d="M36,50c0,0-5.875,2-13,2s-13-3-13-3V15c0,0,5.875,4,13,4s13-2,13-2V50z"/>
+    <path fill="#FCEA2B" d="M36,50c0,0,5.875,2,13,2s13-3,13-3V15c0,0-5.875,4-13,4s-13-2-13-2V50z"/>
+    <!-- Text Lines -->
+    <g fill="none" stroke="#6A4E23" stroke-width="2" stroke-linecap="round">
+      <line x1="16" y1="24" x2="28" y2="25"/>
+      <line x1="16" y1="29" x2="28" y2="30"/>
+      <line x1="16" y1="34" x2="28" y2="35"/>
+      <line x1="16" y1="39" x2="28" y2="40"/>
+      <line x1="44" y1="25" x2="56" y2="24"/>
+      <line x1="44" y1="30" x2="56" y2="29"/>
+      <line x1="44" y1="35" x2="56" y2="34"/>
+      <line x1="44" y1="40" x2="56" y2="39"/>
+    </g>
+    <!-- Bookmark -->
+    <path fill="#D22F27" d="M36,17V54c0,0,1,2,2,0V17"/>
+    <!-- Center Fold -->
+    <line x1="36" y1="17" x2="36" y2="54" stroke="#8A6E4B" stroke-width="1"/>
+  </g>
+</svg>

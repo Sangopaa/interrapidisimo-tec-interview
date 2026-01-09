@@ -5,8 +5,8 @@ terraform {
       version = "~> 5.0"
     }
     random = {
-        source = "hashicorp/random"
-        version = "~> 3.0"
+      source  = "hashicorp/random"
+      version = "~> 3.0"
     }
   }
 }
@@ -15,7 +15,6 @@ provider "aws" {
   region = var.aws_region
 }
 
-# Generate a random suffix for the bucket name to ensure uniqueness
 resource "random_string" "suffix" {
   length  = 6
   special = false
@@ -26,12 +25,9 @@ locals {
   bucket_name = "${var.project_name}-${var.environment}-${random_string.suffix.result}"
 }
 
-# 1. S3 Bucket for hosting static files
 resource "aws_s3_bucket" "website_bucket" {
   bucket = local.bucket_name
 }
-
-# 2. Block all public access to the S3 bucket (security best practice)
 resource "aws_s3_bucket_public_access_block" "block_public" {
   bucket = aws_s3_bucket.website_bucket.id
 
@@ -41,7 +37,6 @@ resource "aws_s3_bucket_public_access_block" "block_public" {
   restrict_public_buckets = true
 }
 
-# 3. CloudFront Origin Access Control (OAC)
 resource "aws_cloudfront_origin_access_control" "default" {
   name                              = "oac-${local.bucket_name}"
   description                       = "OAC for ${local.bucket_name}"
@@ -50,7 +45,6 @@ resource "aws_cloudfront_origin_access_control" "default" {
   signing_protocol                  = "sigv4"
 }
 
-# 4. CloudFront Distribution
 resource "aws_cloudfront_distribution" "s3_distribution" {
   origin {
     domain_name              = aws_s3_bucket.website_bucket.bucket_regional_domain_name
@@ -61,9 +55,8 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
   enabled             = true
   is_ipv6_enabled     = true
   default_root_object = "index.html"
-  price_class         = "PriceClass_100" # Use PriceClass_All for global Edge locations
+  price_class         = "PriceClass_100"
 
-  # SPA Routing: Redirect 403/404 errors to index.html to let Angular handle routing
   custom_error_response {
     error_code         = 403
     response_code      = 200
@@ -111,15 +104,14 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
   }
 }
 
-# 5. Bucket Policy to allow CloudFront to access the S3 bucket
 resource "aws_s3_bucket_policy" "allow_access_from_cloudfront" {
   bucket = aws_s3_bucket.website_bucket.id
   policy = jsonencode({
     Version = "2012-10-17"
     Statement = [
       {
-        Sid       = "AllowCloudFrontServicePrincipal"
-        Effect    = "Allow"
+        Sid    = "AllowCloudFrontServicePrincipal"
+        Effect = "Allow"
         Principal = {
           Service = "cloudfront.amazonaws.com"
         }
