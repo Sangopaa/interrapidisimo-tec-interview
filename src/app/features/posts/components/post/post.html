@@ -38,7 +38,7 @@
       (click)="toggleLike($event)"
       [class.text-red-600]="liked()"
       [class.!bg-red-50]="liked()"
-      class="!text-gray-400 hover:!text-red-500 hover:!bg-red-50 transition-all active:scale-95 transform duration-200"
+      class="!text-red-500 hover:!bg-red-50 transition-all active:scale-95 transform duration-200"
     >
       <mat-icon>{{ liked() ? 'favorite' : 'favorite_border' }}</mat-icon>
     </button>
