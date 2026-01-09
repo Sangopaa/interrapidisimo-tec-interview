@@ -2,6 +2,8 @@
 
 A modern, cloud-native web application built with Angular 21, designed for high performance, security, and scalability. This project demonstrates a production-grade Infrastructure as Code (IaC) setup using Terraform to deploy a Secure Static Website Hosting solution on AWS.
 
+> **🚀 Live Demo / Deployment:** [https://dkxiwhxiz3cjd.cloudfront.net/posts](https://dkxiwhxiz3cjd.cloudfront.net/posts)
+
 ## 🏗 Architecture
 
 The solution leverages **AWS CloudFront** for global content delivery and **Amazon S3** for secure, private storage. Access to the S3 origin is strictly controlled via **Origin Access Control (OAC)**, ensuring that content can only be accessed through the distribution.
@@ -39,6 +41,37 @@ The solution leverages **AWS CloudFront** for global content delivery and **Amaz
 ├── angular.json        # Angular CLI configuration
 └── package.json        # Project dependencies
 ```
+
+---
+
+## 🧩 Application Architecture & Components
+
+The application follows a **Modular Feature-Based Architecture**, ensuring separation of concerns, scalability, and maintainability.
+
+### 1. Core Module (`src/app/core`)
+
+Contains singleton services and global utilities used across the application.
+
+- **Services**:
+  - `PostService`: Handles API communication for fetching and managing posts.
+  - `UserService`: Manages user-related data and retrieval.
+- **Interceptors**: Global HTTP error handling and request modification.
+- **State Management**: Centralized store for managing application state (e.g., posts list, loading states).
+
+### 2. Features Module (`src/app/features`)
+
+Organized by domain/business logic. The main feature currently implemented is **Posts**.
+
+#### 📦 Posts Feature (`src/app/features/posts`)
+
+A self-contained module managing the display and interaction of user posts.
+
+- **Smart Container**:
+  - `PostsComponent`: The main page controller that subscribes to the store and manages the data flow.
+- **Dumb/Presentational Components**:
+  - `PostComponent`: Reusable card component to display individual post summaries.
+  - `InputComponent`: specialized search or input control for filtering/adding posts.
+  - `PostDetailModalComponent`: A modal dialog that fetches and displays full details of a selected post without navigating away.
 
 ---
 
@@ -98,6 +131,27 @@ aws s3 sync dist/interview/browser s3://<YOUR_BUCKET_NAME> --delete
 ```
 
 After synchronization, your application will be available at the CloudFront URL provided by the Terraform output.
+
+---
+
+## 🔄 Automated Deployment Pipeline (CI/CD)
+
+The project includes a fully automated deployment pipeline using **GitHub Actions**, defined in `.github/workflows/aws-deploy.yml`.
+
+### Workflow Stages
+
+1.  **Build**: Installs dependencies and compiles the Angular application for production.
+2.  **Deploy**: Syncs the build artifacts to the private S3 bucket.
+3.  **Invalidate**: Clears the CloudFront cache to ensure users see the latest version immediately.
+
+### Required Secrets
+
+To enable the pipeline, configure the following **Repository Secrets** in GitHub:
+
+- `AWS_ACCESS_KEY_ID` & `AWS_SECRET_ACCESS_KEY`: IAM User credentials with permissions for S3 and CloudFront.
+- `AWS_REGION`: Target AWS Region (e.g., `us-east-1`).
+- `AWS_S3_BUCKET`: The name of the S3 bucket created by Terraform.
+- `CLOUDFRONT_DISTRIBUTION_ID`: The ID of the CloudFront distribution.
 
 ---
 
